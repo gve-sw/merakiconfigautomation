@@ -1,0 +1,121 @@
+<!-- Template page: offers three sections to visualize a 3 steps workflow.-->
+
+{% extends "masterPage.html" %}
+
+{% block content %}
+<div class="row">
+
+        <!-- Left Rail -->
+        <div class="col-xl-3 col-md-4">
+            <div class="section" >
+                <div class="panel panel--loose panel--raised base-margin-bottom">
+                    <h2 class="subtitle">Step 1: Choose organization and network </h2>
+                    <div class="section">
+                            <div class="form-group base-margin-bottom">
+                                <div class="form-group__text select">
+                                        <select name="organization_id" id='organization_id' required>
+                                            <option disabled selected hidden value="0">Please choose...</option>
+                                            {% for org in organizations %}<option value="{{org.id}}" {% if selected_organization.id == org.id %} selected {% endif %}>{{org.name}} (ID:{{org.id}})</option>{% endfor %}
+                                        </select>
+                                    <label for="organization_id">Organization*</label>
+                                </div>
+                            </div>
+
+                            <!--Network fields-->
+                            <div id="network_select" class="network-select" {% if not selected_organization %} hidden {% endif %} >
+                                <div class="form-group base-margin-bottom">
+                                    <div class="form-group__text select">
+                                        <select name="network_id" id='network_id' class='networks'>
+                                            <option disabled selected hidden value="0">Please choose...</option>
+                                            {% if networks %}
+                                                {% for network in networks %}
+                                                    <option value="{{network['id']}}" {% if selected_network.id == network['id'] %} selected {% endif %}>{{network['name']}} (ID:{{network['id']}})</option>                                                      
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                        <label for="network_id">Network*</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span class="required-label pull-right">* required fields</span>
+                            <br>
+                </div> 
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Rail -->
+
+        <div class="col-xl-3 col-md-4">
+            <div class="section" >
+                <div class="panel panel--loose panel--raised base-margin-bottom">
+                    <h2 class="subtitle">Step 2: Device Configuration </h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Rail -->
+        <div class="col-xl-6 col-md-4">
+
+            <div class="section" >
+                <div class="panel panel--loose panel--raised base-margin-bottom">
+                    <h2 class="subtitle">Step 3: Apply Configuration: Create Vlan </h2>
+
+                        {% if message %}
+                            <div class="alert alert--success" role="alert">
+                                    Success: {{ message }}
+                            </div>
+                        {% endif %}
+
+                    <div class="section">
+                        <form action="/config_device" method="POST" >
+                            <div class="form-group base-margin-bottom">
+
+                                <div class="form-group__text select">
+                                    <select name="device_id" id='device_id' class='devices'>
+                                        <option disabled selected hidden value="0">Please choose...</option>
+                                        {% if devices %}
+                                        {% for device in devices %}
+                                        <option value="{{device['serial']}}">{{device['name']}} (ID:{{device['serial']}})</option>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                    <label for="device_id">Devices*</label>
+                                </div>
+                                </br>
+
+                                <div class="form-group__text">
+                                    <textarea name="vlan" id='vlan' required></textarea>
+                                    <label for="vlan">Vlan*</label>
+                                </div>
+                                </br>
+
+                                <div class="form-group__text select">
+                                    <textarea name="name" id='name' required></textarea>
+                                    <label for="name">Name*</label>
+                                </div>
+                                </br>
+
+                                 <div class="form-group__text select">
+                                     <textarea name="subnet" id='subnet' required></textarea>
+                                    <label for="subnet">Subnet*</label>
+                                </div>
+
+                            </div>
+
+                            <span class="required-label pull-right">* required fields</span>
+                            <br>
+                            <div class="flex-fluid" style="text-align: right;">
+                                <input name="submit_button" class="btn btn-primary" type="submit" id="change_this" value="Create Vlan" style="display:inline" onclick="loading_network_organization()">
+                            </div>
+
+                        </form>
+                </div>
+                </div>
+            </div>
+
+
+    </div>
+</div>
+{%  endblock %}

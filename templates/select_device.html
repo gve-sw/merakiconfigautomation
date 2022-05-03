@@ -1,0 +1,96 @@
+<!-- Template page: offers three sections to visualize a 3 steps workflow.-->
+
+{% extends "masterPage.html" %}
+
+{% block content %}
+<div class="row">
+
+        <!-- Left Rail -->
+        <div class="col-xl-3 col-md-4">
+            <div class="section" >
+                <div class="panel panel--loose panel--raised base-margin-bottom">
+                    <h2 class="subtitle">Step 1: Choose organization and network </h2>
+                    <div class="section">
+                            <div class="form-group base-margin-bottom">
+                                <div class="form-group__text select">
+                                        <select name="organization_id" id='organization_id' required>
+                                            <option disabled selected hidden value="0">Please choose...</option>
+                                            {% for org in organizations %}<option value="{{org.id}}" {% if selected_organization.id == org.id %} selected {% endif %}>{{org.name}} (ID:{{org.id}})</option>{% endfor %}
+                                        </select>
+                                    <label for="organization_id">Organization*</label>
+                                </div>
+                            </div>
+
+                            <!--Network fields-->
+                            <div id="network_select" class="network-select" {% if not selected_organization %} hidden {% endif %} >
+                                <div class="form-group base-margin-bottom">
+                                    <div class="form-group__text select">
+                                        <select name="network_id" id='network_id' class='networks'>
+                                            <option disabled selected hidden value="0">Please choose...</option>
+                                            {% if networks %}
+                                                {% for network in networks %}
+                                                    <option value="{{network['id']}}" {% if selected_network.id == network['id'] %} selected {% endif %}>{{network['name']}} (ID:{{network['id']}})</option>                                                      
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                        <label for="network_id">Network*</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span class="required-label pull-right">* required fields</span>
+                            <br>
+                </div> 
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Rail -->
+
+        <div class="col-xl-3 col-md-4">
+
+            <div class="section" >
+
+                <div class="panel panel--loose panel--raised base-margin-bottom">
+                    <h2 class="subtitle">Step 2: Device Configuration </h2>
+                    <div class="section">
+                        <form action="/config_device" method="POST" >
+                            <div class="flex-fluid" style="text-align: center;">
+                                <input name="submit_button" class="btn btn-primary" type="submit" id="submit_device_id" value="Configure Device" style="display:inline">
+                            </div>
+                        </form>
+                </div>
+                </div>
+
+                <div class="panel panel--loose panel--raised base-margin-bottom">
+                    <h2 class="subtitle">Step 2: Create Template </h2>
+                    <div class="section">
+                        <form action="/config_template" method="POST" >
+                            <span class="required-label pull-right">* required fields</span>
+                            <br>
+                            <div class="flex-fluid" style="text-align: center;">
+                                <input name="submit_button" class="btn btn-primary" type="submit" id="submit_template_id" value="Create template" style="display:inline" onclick="loading_network_organization()">
+                            </div>
+
+                        </form>
+                </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    <!-- Right Rail -->
+    <div class="col-xl-3 col-md-4">
+    </div>
+</div>
+{%  endblock %}
+
+<script>
+function loading_network_organization() {
+    var wheel = document.getElementById("loading_netw_org");
+    wheel.style.display = "inline-block";
+    var submit_switch = document.getElementById("submit_netw_org");
+    submit_switch.style.display = "none";
+  }
+</script>
